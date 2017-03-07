@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <META name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to bloomload</title>
+
+    <!-- styles -->
+    {% style "/assets/bootstrap/css/bootstrap.min.css" %}
+    {% style "/assets/font-awesome/css/font-awesome.min.css" %}
+
+    {% style "/css/screen.css" %}
+  </head>
+  <body>
+    <input type="file" id="upload_input" name="upload"  onchange="encodeImageFileAsURL()"  ng-model="image"/>
+
+    
+    <script>
+
+     function sendDoc(doc) {
+       var xhttp = new XMLHttpRequest();
+       xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+           document.getElementById("demo").innerHTML = this.responseText;
+         }
+       };
+       xhttp.open("GET", doc, true);
+       xhttp.send();
+     }
+     
+     function encodeImageFileAsURL(){
+
+       var filesSelected = document.getElementById('upload_input').files;
+       if (filesSelected.length > 0)
+       {
+         var fileToLoad = filesSelected[0];
+
+         var fileReader = new FileReader();
+
+         fileReader.onload = function(fileLoadedEvent) {
+           var srcData = fileLoadedEvent.target.result; // <--- data: base64
+           var contentType = (filesSelected !== null && filesSelected !== undefined && filesSelected.length > 0) ?
+                             filesSelected[0].type : '';
+
+           var filename = (filesSelected !== null && filesSelected !== undefined) ? filesSelected[0].name : '';
+           
+           if (filename === null || filename === undefined || filename.length < 1) {
+             filename = 'Image' + ($scope.item.images.length+1);
+           }
+
+           if (srcData.indexOf('data:image') === -1)
+           {
+             var pic1 = srcData.indexOf(';base64');
+             if (contentType === null || contentType === undefined || contentType.length < 1) {
+               contentType = 'image/png';
+             }
+
+             srcData = 'data:' + contentType + srcData.substring(pic1);
+           }
+           
+           jQuery.ajax({
+             url:"/savefile",
+             data:{img_data:srcData,img_id:1,name:"tobesaved"},
+             type:"POST",
+             contentType:"application/x-www-form-urlencoded",
+             success:function(result)
+             {
+               alert(result);
+             }
+           });
+         };
+         fileReader.readAsDataURL(fileToLoad);
+       }
+     };
+    </script>
+
+    <!-- scripts -->
+    {% script "/assets/jquery/jquery.min.js" %}
+    {% script "/assets/tether/dist/js/tether.min.js" %}
+    {% script "/assets/bootstrap/js/bootstrap.min.js" %}
+
+    <script type="text/javascript">
+      var context = "{{servlet-context}}";
+    </script>
+    {% block page-scripts %}
+    {% endblock %}
+  </body>
+</html>
