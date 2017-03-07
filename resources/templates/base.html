@@ -50,17 +50,13 @@
 
            if (srcData.indexOf('data:image') === -1)
            {
-             var pic1 = srcData.indexOf(';base64');
-             if (contentType === null || contentType === undefined || contentType.length < 1) {
-               contentType = 'image/png';
-             }
-
-             srcData = 'data:' + contentType + srcData.substring(pic1);
+             var ind1 = srcData.indexOf(';base64') + 8;
+             srcData = srcData.substring(ind1);
            }
            
            jQuery.ajax({
              url:"/savefile",
-             data:{img_data:srcData,img_id:1,name:"tobesaved"},
+             data:{img_data:srcData,img_id:1,name:document.getElementById('upload_input').files[0].name},
              type:"POST",
              contentType:"application/x-www-form-urlencoded",
              success:function(result)

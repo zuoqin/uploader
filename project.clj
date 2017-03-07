@@ -23,6 +23,8 @@
                  [ring-webjars "0.1.1"]
                  [ring/ring-core "1.5.1"]
                  [ring/ring-defaults "0.2.2"]
+                 [base64-clj "0.1.1"]
+                 [clj-ssh "0.5.14"]
                  [selmer "1.10.5"]]
 
   :min-lein-version "2.0.0"
