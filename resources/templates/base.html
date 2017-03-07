@@ -12,27 +12,16 @@
     {% style "/css/screen.css" %}
   </head>
   <body>
-    <input type="file" id="upload_input" name="upload"  onchange="encodeImageFileAsURL()"  ng-model="image"/>
-
-    
+    <h3>Sberbank Private Bank Bloomberg SFTP directory Uploader</h3>
+    <input type="file" id="upload_input" name="upload"  ng-model="image"/>
+    <p>Click the "Upload" button to transfer selected txt file to Bloomberg Sberbank SFTP directory.</p>
+    <button id="Button" onclick="encodeImageFileAsURL()">Upload!</button>
     <script>
-
-     function sendDoc(doc) {
-       var xhttp = new XMLHttpRequest();
-       xhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-           document.getElementById("demo").innerHTML = this.responseText;
-         }
-       };
-       xhttp.open("GET", doc, true);
-       xhttp.send();
-     }
-     
      function encodeImageFileAsURL(){
-
        var filesSelected = document.getElementById('upload_input').files;
        if (filesSelected.length > 0)
        {
+         document.getElementById("Button").disabled = true;
          var fileToLoad = filesSelected[0];
 
          var fileReader = new FileReader();
@@ -61,7 +50,8 @@
              contentType:"application/x-www-form-urlencoded",
              success:function(result)
              {
-               alert(result);
+               alert("File: " + result + " successfully transfered to Sberbank Bloomberg SFTP directory");
+               document.getElementById("Button").disabled = false;
              }
            });
          };
